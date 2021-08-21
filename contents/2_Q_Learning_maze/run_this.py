@@ -19,8 +19,8 @@ from RL_brain import QLearningTable
 def update():
     for episode in range(100):
         # initial observation
-        observation = env.reset()
-
+        observation = env.reset() # 每一次进入一个新的episode，都是需要充重置一下环境的了，让其回到初始的状态。
+                                  # 原来observation返回的就是第一个例子中的状态了 
         while True:
             # fresh env
             env.render()
@@ -29,6 +29,8 @@ def update():
             action = RL.choose_action(str(observation))
 
             # RL take action and get next observation and reward
+            # 其实就是和第一个例子里面是类似的，就是返回state，reward，terminal
+            # 我的理解，就是根据action，选择进入了下一个状态(observation)，
             observation_, reward, done = env.step(action)
 
             # RL learn from this transition
@@ -45,9 +47,10 @@ def update():
     print('game over')
     env.destroy()
 
+# 这个文档不同之处，就是在于
 if __name__ == "__main__":
-    env = Maze()
-    RL = QLearningTable(actions=list(range(env.n_actions)))
+    env = Maze() # 初始化环境
+    RL = QLearningTable(actions=list(range(env.n_actions))) # 初始化Q Table
 
     env.after(100, update)
-    env.mainloop()
+    env.mainloop() # 会调用update函数，但是现在需要搞清楚一下，这个gym到底是怎么运行的了。

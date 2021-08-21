@@ -22,9 +22,10 @@ class QLearningTable:
         # action selection
         if np.random.uniform() < self.epsilon:
             # choose best action
-            state_action = self.q_table.loc[observation, :]
+            state_action = self.q_table.loc[observation, :] # 这里是选择state(observation)一行对应的所有的action
             # some actions may have the same value, randomly choose on in these actions
-            action = np.random.choice(state_action[state_action == np.max(state_action)].index)
+            action = np.random.choice(state_action[state_action == np.max(state_action)].index) # 虽然我不全理解这部分的语句，但是
+                                                            #这里的基本思路我是能够很清楚的把握的了。 
         else:
             # choose random action
             action = np.random.choice(self.actions)
@@ -39,6 +40,10 @@ class QLearningTable:
             q_target = r  # next state is terminal
         self.q_table.loc[s, a] += self.lr * (q_target - q_predict)  # update
 
+
+    # 也就是说，就是需要在两种情况下就是需要调用这个检查函数的了，第一个是检查当前状态是不是一个新的状态。
+    # 另外一个，就是获得了知道了新的状态的时候，就是需要检查一下，其实第一个仅仅是在刚进入episode的时候起作用，
+    # 当在正常的loop循环里面，第一个检查就是没有太大的意义的了。
     def check_state_exist(self, state):
         if state not in self.q_table.index:
             # append new state to q table
