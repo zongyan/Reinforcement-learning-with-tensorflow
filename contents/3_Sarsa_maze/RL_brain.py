@@ -72,6 +72,9 @@ class SarsaTable(RL):
         q_predict = self.q_table.loc[s, a]
         if s_ != 'terminal':
             q_target = r + self.gamma * self.q_table.loc[s_, a_]  # next state is not terminal
+            # Line 58是给出了max的Q Table数值，但是在sarsa里面，则是根据下一个action，得到一个Q值，这个就是Q 
+            # learning和SARSA的区别了，其实就是如SARSA的名字所示的，SARSA多了最后一个A了，但是Q Learning就是
+            # 没有最后一个A，而是用max代替的了
         else:
             q_target = r  # next state is terminal
         self.q_table.loc[s, a] += self.lr * (q_target - q_predict)  # update
